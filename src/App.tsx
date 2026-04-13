@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import Onboarding from "./pages/Onboarding.tsx";
 import Scanner from "./pages/Scanner.tsx";
 import Lectures from "./pages/Lectures.tsx";
+import LigneSignification from "./pages/LigneSignification.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
