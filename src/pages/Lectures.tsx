@@ -9,16 +9,18 @@ const plans = [
     period: "par lecture",
     highlight: false,
     gratuit: ["Lignes principales (Vie, Cœur, Tête)", "Résumé rapide"],
-    payant: ["Ligne du Destin détaillée", "Conseils personnalisés", "PDF téléchargeable"],
+    payant: ["Ligne du Destin détaillée", "Conseils personnalisés", "🧝 Ton avatar personnalisé intégré à ton PDF", "🎨 PDF 100% customisable (thème, couleurs, message, décoration)"],
+    tagline: "Parce que ton destin mérite mieux qu'une devinette 🌙",
   },
   {
     icon: "💕",
     title: "Lecture Amoureuse",
+    subtitle: "Deux mains, un seul destin...",
     price: "1,98€",
     period: "par lecture",
     highlight: false,
     gratuit: ["Compatibilité de base", "Ligne de Cœur analysée"],
-    payant: ["Compatibilité détaillée à deux", "Prédictions amoureuses", "Rapport PDF duo"],
+    payant: ["Compatibilité détaillée à deux", "Prédictions amoureuses", "🎨 PDF duo 100% personnalisable (thème, couleurs, décoration)", "🧝 2 avatars personnalisés inclus sur votre PDF commun"],
   },
   {
     icon: "👑",
@@ -27,7 +29,7 @@ const plans = [
     period: "/mois · sans engagement",
     highlight: true,
     gratuit: ["Toutes les lectures illimitées", "Historique complet", "Avatar personnalisé"],
-    payant: ["PDF personnalisés illimités", "Nouvelles lignes en avant-première", "Support prioritaire"],
+    payant: ["🎨 PDF illimités ultra-customisables avec ton avatar unique", "Nouvelles lignes en avant-première", "Support prioritaire"],
   },
 ];
 
