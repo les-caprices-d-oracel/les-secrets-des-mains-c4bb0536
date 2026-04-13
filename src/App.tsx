@@ -29,6 +29,7 @@ const App = () => (
           <Route path="/" element={<RequireOnboarding><Index /></RequireOnboarding>} />
           <Route path="/scanner" element={<RequireOnboarding><Scanner /></RequireOnboarding>} />
           <Route path="/lectures" element={<RequireOnboarding><Lectures /></RequireOnboarding>} />
+          <Route path="/ligne/:ligne" element={<RequireOnboarding><LigneSignification /></RequireOnboarding>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
