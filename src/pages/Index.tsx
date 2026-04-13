@@ -1,5 +1,5 @@
 import StarField from "@/components/StarField";
-import BottomNav from "@/components/BottomNav";
+import FloatingHandNav from "@/components/FloatingHandNav";
 import handImage from "@/assets/hand-mystical.png";
 import { useNavigate } from "react-router-dom";
 
@@ -60,7 +60,7 @@ const Index = () => {
         </div>
       </div>
 
-      <BottomNav />
+      <FloatingHandNav />
     </div>
   );
 };
