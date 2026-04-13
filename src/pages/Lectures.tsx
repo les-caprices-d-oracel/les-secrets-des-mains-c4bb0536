@@ -82,6 +82,9 @@ const Lectures = () => {
               <span className="text-2xl">{plan.icon}</span>
               <div>
                 <h2 className="font-display text-base text-primary leading-tight">{plan.title}</h2>
+                {plan.subtitle && (
+                  <p className="text-xs text-muted-foreground font-body italic">{plan.subtitle}</p>
+                )}
                 <p className="text-foreground font-body font-bold text-xl">
                   {plan.price}
                   <span className="text-xs text-muted-foreground font-normal ml-1">{plan.period}</span>
