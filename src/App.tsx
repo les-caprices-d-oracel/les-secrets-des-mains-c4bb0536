@@ -8,6 +8,7 @@ import Onboarding from "./pages/Onboarding.tsx";
 import Scanner from "./pages/Scanner.tsx";
 import Lectures from "./pages/Lectures.tsx";
 import LigneSignification from "./pages/LigneSignification.tsx";
+import Resultat from "./pages/Resultat.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/scanner" element={<RequireOnboarding><Scanner /></RequireOnboarding>} />
           <Route path="/lectures" element={<RequireOnboarding><Lectures /></RequireOnboarding>} />
           <Route path="/ligne/:ligne" element={<RequireOnboarding><LigneSignification /></RequireOnboarding>} />
+          <Route path="/resultat" element={<RequireOnboarding><Resultat /></RequireOnboarding>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
