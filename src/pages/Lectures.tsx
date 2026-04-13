@@ -118,6 +118,11 @@ const Lectures = () => {
               </ul>
             </div>
 
+            {/* Tagline */}
+            {plan.tagline && (
+              <p className="text-xs text-muted-foreground font-body italic text-center mb-3">{plan.tagline}</p>
+            )}
+
             {/* CTA */}
             <button
               className="w-full py-2.5 rounded-xl font-body font-bold text-sm text-primary-foreground transition-transform active:scale-95"
