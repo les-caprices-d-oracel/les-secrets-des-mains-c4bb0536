@@ -1,267 +1,353 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
 
-const lines = [
+/* ── Palm line definitions ── */
+const palmLines = [
   {
     id: "vie",
     label: "Ligne de Vie ✨",
-    color: "#00E676",
+    color: "#00C853",
     delay: 0,
-    path: "M 108 330 C 100 290, 88 250, 82 210 C 76 175, 78 145, 90 120",
-    labelPos: { x: 50, y: 220 },
     route: "/ligne/vie",
+    // Life line: curves from between thumb & index around the mount of Venus
+    path: "M 152 168 C 140 190, 120 220, 110 255 C 100 290, 98 320, 105 355 C 110 375, 118 390, 130 400",
+    labelPos: { x: 62, y: 280 },
+    length: 320,
   },
   {
     id: "coeur",
     label: "Ligne de Cœur 💕",
-    color: "#FF6FB4",
-    delay: 1.5,
-    path: "M 75 175 C 100 155, 135 145, 170 148 C 195 150, 220 158, 240 170",
-    labelPos: { x: 180, y: 135 },
+    color: "#FF4081",
+    delay: 2,
     route: "/ligne/coeur",
+    // Heart line: horizontal across upper palm, pinky to index
+    path: "M 260 178 C 240 168, 215 162, 190 165 C 165 168, 145 172, 130 178 C 118 183, 108 190, 100 198",
+    labelPos: { x: 155, y: 148 },
+    length: 220,
   },
   {
     id: "tete",
     label: "Ligne de Tête 🧠",
-    color: "#9B59B6",
-    delay: 3,
-    path: "M 80 200 C 110 185, 150 180, 185 185 C 210 188, 230 195, 245 205",
-    labelPos: { x: 185, y: 175 },
+    color: "#7C4DFF",
+    delay: 4,
     route: "/ligne/tete",
+    // Head line: across mid palm, slightly curved
+    path: "M 148 195 C 165 200, 190 205, 215 210 C 235 214, 250 218, 262 225",
+    labelPos: { x: 185, y: 196 },
+    length: 180,
   },
   {
     id: "destin",
     label: "Ligne du Destin 🌟",
     color: "#FFD700",
-    delay: 4.5,
-    path: "M 155 340 C 152 300, 150 260, 148 220 C 146 190, 145 165, 148 140",
-    labelPos: { x: 165, y: 260 },
+    delay: 6,
     route: "/ligne/destin",
+    // Fate line: vertical from base up to middle finger
+    path: "M 185 410 C 183 380, 180 340, 178 300 C 176 265, 175 235, 176 200 C 177 180, 178 165, 180 155",
+    labelPos: { x: 192, y: 295 },
+    length: 300,
   },
 ];
 
-const navItems = [
+const menuItems = [
   { icon: "🏠", label: "Accueil", path: "/" },
   { icon: "🕐", label: "Historique", path: "/historique" },
   { icon: "👤", label: "Profil", path: "/profil" },
   { icon: "👑", label: "Nos Offres", path: "/lectures" },
 ];
 
+/* ── Realistic Hand SVG ── */
+const HandSVG = ({
+  hoveredLine,
+  onLineHover,
+  onLineLeave,
+  onLineClick,
+}: {
+  hoveredLine: string | null;
+  onLineHover: (id: string) => void;
+  onLineLeave: () => void;
+  onLineClick: (route: string) => void;
+}) => (
+  <svg viewBox="0 0 340 480" className="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      {/* Skin gradient */}
+      <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#F5D5A0" />
+        <stop offset="100%" stopColor="#E8B87A" />
+      </linearGradient>
+      <linearGradient id="skinDark" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#E8C090" />
+        <stop offset="100%" stopColor="#D4A055" />
+      </linearGradient>
+      {/* Glow filters for each line */}
+      {palmLines.map((l) => (
+        <filter key={l.id} id={`glow-${l.id}`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation={hoveredLine === l.id ? "6" : "3"} result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      ))}
+    </defs>
+
+    {/* ── PALM ── */}
+    <path
+      d="M 100 430 C 85 400, 70 350, 68 300 C 66 260, 72 220, 85 195 L 95 178
+         C 100 170, 108 162, 118 158
+         L 130 155 L 152 155
+         C 158 155, 165 152, 170 148
+         L 180 142
+         C 190 148, 200 152, 210 155
+         L 240 158
+         C 260 162, 272 170, 278 185
+         L 282 195
+         C 290 220, 292 260, 288 300
+         C 284 350, 270 400, 255 430
+         Q 178 465, 100 430 Z"
+      fill="url(#skinGrad)"
+      stroke="#D4A055"
+      strokeWidth="1.2"
+    />
+
+    {/* Palm mounts - subtle shading */}
+    {/* Mount of Venus (thumb base) */}
+    <ellipse cx="125" cy="340" rx="35" ry="50" fill="#E0B878" opacity="0.3" />
+    {/* Mount of Jupiter (below index) */}
+    <ellipse cx="135" cy="175" rx="18" ry="14" fill="#DCAD6E" opacity="0.2" />
+    {/* Mount of Saturn (below middle) */}
+    <ellipse cx="178" cy="168" rx="16" ry="12" fill="#DCAD6E" opacity="0.2" />
+    {/* Mount of Apollo (below ring) */}
+    <ellipse cx="218" cy="172" rx="16" ry="12" fill="#DCAD6E" opacity="0.2" />
+    {/* Mount of Mercury (below pinky) */}
+    <ellipse cx="255" cy="185" rx="14" ry="12" fill="#DCAD6E" opacity="0.2" />
+    {/* Mount of Moon (opposite Venus) */}
+    <ellipse cx="245" cy="350" rx="30" ry="45" fill="#E0B878" opacity="0.2" />
+
+    {/* ── THUMB ── */}
+    <path
+      d="M 95 178 C 80 168, 62 155, 48 140 C 35 128, 25 112, 28 98
+         C 31 84, 42 76, 55 80 C 68 84, 78 98, 82 115
+         C 86 130, 90 148, 100 165"
+      fill="url(#skinGrad)" stroke="#D4A055" strokeWidth="1.2"
+    />
+    {/* Thumb phalanx crease */}
+    <path d="M 45 125 C 55 120, 68 118, 78 122" stroke="#D4A055" strokeWidth="0.6" opacity="0.5" fill="none" />
+
+    {/* ── INDEX FINGER ── */}
+    <path
+      d="M 118 158 C 115 135, 110 108, 107 82 C 104 60, 102 38, 108 22
+         C 114 8, 126 4, 136 10 C 146 18, 148 38, 147 58
+         C 146 78, 143 108, 140 135 L 152 155"
+      fill="url(#skinGrad)" stroke="#D4A055" strokeWidth="1.2"
+    />
+    {/* Index creases */}
+    <path d="M 112 105 C 122 100, 138 100, 145 104" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+    <path d="M 108 72 C 118 68, 136 68, 145 72" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+
+    {/* ── MIDDLE FINGER ── */}
+    <path
+      d="M 152 155 C 152 128, 155 95, 158 65 C 160 40, 162 18, 170 5
+         C 178 -4, 190 -4, 196 5 C 202 18, 202 40, 200 65
+         C 198 95, 196 128, 195 148 L 210 155"
+      fill="url(#skinGrad)" stroke="#D4A055" strokeWidth="1.2"
+    />
+    <path d="M 155 92 C 165 87, 188 87, 198 92" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+    <path d="M 158 58 C 168 53, 185 53, 196 58" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+
+    {/* ── RING FINGER ── */}
+    <path
+      d="M 210 155 C 212 130, 218 100, 222 72 C 225 50, 228 30, 234 18
+         C 240 8, 250 8, 255 18 C 260 30, 258 50, 256 72
+         C 253 100, 248 130, 245 155 L 260 165"
+      fill="url(#skinGrad)" stroke="#D4A055" strokeWidth="1.2"
+    />
+    <path d="M 220 98 C 230 93, 248 93, 255 98" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+    <path d="M 224 65 C 232 60, 248 60, 254 65" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+
+    {/* ── PINKY FINGER ── */}
+    <path
+      d="M 260 165 C 265 145, 272 118, 278 95 C 282 78, 285 62, 282 50
+         C 280 40, 272 36, 265 42 C 258 48, 258 65, 260 82
+         C 262 100, 265 125, 268 150 L 278 185"
+      fill="url(#skinGrad)" stroke="#D4A055" strokeWidth="1.2"
+    />
+    <path d="M 262 108 C 270 104, 278 106, 280 110" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+    <path d="M 268 78 C 273 74, 280 76, 281 80" stroke="#D4A055" strokeWidth="0.6" opacity="0.4" fill="none" />
+
+    {/* ── PALM LINES ── */}
+    {palmLines.map((line) => {
+      const isHovered = hoveredLine === line.id;
+      return (
+        <g key={line.id}>
+          {/* Hit area */}
+          <path
+            d={line.path}
+            stroke="transparent"
+            strokeWidth="18"
+            fill="none"
+            className="cursor-pointer"
+            onMouseEnter={() => onLineHover(line.id)}
+            onMouseLeave={onLineLeave}
+            onClick={() => onLineClick(line.route)}
+          />
+          {/* Visible line */}
+          <path
+            d={line.path}
+            stroke={line.color}
+            strokeWidth={isHovered ? "3.5" : "2.5"}
+            strokeLinecap="round"
+            fill="none"
+            filter={`url(#glow-${line.id})`}
+            className="pointer-events-none"
+            style={{
+              strokeDasharray: line.length,
+              strokeDashoffset: line.length,
+              animation: `draw-line 1.2s ease-out ${line.delay * 0.5}s forwards`,
+              transition: "stroke-width 0.3s",
+            }}
+          >
+            <animate
+              attributeName="opacity"
+              values="0.75;1;0.75"
+              dur="3s"
+              begin={`${line.delay * 0.5 + 1.2}s`}
+              repeatCount="indefinite"
+            />
+          </path>
+
+          {/* Hover label */}
+          {isHovered && (
+            <foreignObject x={line.labelPos.x} y={line.labelPos.y} width="150" height="32" className="pointer-events-none">
+              <div
+                className="font-body text-xs font-semibold px-3 py-1.5 rounded-lg text-center whitespace-nowrap w-fit"
+                style={{
+                  background: "rgba(26, 10, 59, 0.9)",
+                  backdropFilter: "blur(12px)",
+                  border: `1px solid ${line.color}44`,
+                  color: line.color,
+                  animation: "label-in 0.2s ease-out",
+                }}
+              >
+                {line.label}
+              </div>
+            </foreignObject>
+          )}
+        </g>
+      );
+    })}
+  </svg>
+);
+
+/* ── Main Component ── */
 const Index = () => {
   const navigate = useNavigate();
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
-  const [sparkles, setSparkles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Sparkles around line endpoints
+  // Close menu on outside click
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSparkles((prev) => {
-        const filtered = prev.filter((s) => Date.now() - s.id < 2500);
-        if (filtered.length < 6) {
-          // Random positions near the hand area
-          const cx = 150 + (Math.random() - 0.5) * 200;
-          const cy = 200 + (Math.random() - 0.5) * 200;
-          return [...filtered, { id: Date.now(), x: cx, y: cy, size: Math.random() * 8 + 5 }];
-        }
-        return filtered;
-      });
-    }, 600);
-    return () => clearInterval(interval);
-  }, []);
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest("[data-menu]")) setMenuOpen(false);
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [menuOpen]);
+
+  const handleLineClick = useCallback(
+    (route: string) => navigate(route),
+    [navigate]
+  );
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center overflow-hidden">
+    <div className="relative min-h-screen flex flex-col overflow-hidden">
       <StarField />
 
-      <div className="relative z-10 flex flex-col items-center w-full max-w-md mx-auto px-4 pt-8 pb-24">
-        {/* Title */}
-        <h1 className="font-display text-2xl md:text-3xl text-primary text-center leading-tight mb-2 drop-shadow-[0_0_20px_hsla(51,100%,50%,0.4)]">
+      {/* ── Header ── */}
+      <header className="relative z-20 flex items-center justify-between px-5 pt-6">
+        <h1 className="font-display text-lg text-primary leading-tight drop-shadow-[0_0_15px_hsla(51,100%,50%,0.35)]">
           Les Secrets
           <br />
           des Mains
         </h1>
 
-        <p className="text-muted-foreground text-center text-xs mb-4 max-w-xs">
-          Touchez une ligne pour découvrir sa signification ✨
-        </p>
-
-        {/* SVG Hand — 60% of screen */}
-        <div
-          className="relative w-full flex items-center justify-center"
-          style={{ animation: "float 3s ease-in-out infinite" }}
-        >
-          <svg
-            viewBox="0 0 300 400"
-            className="w-full h-auto"
-            style={{ maxHeight: "55vh" }}
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        {/* Magic menu button */}
+        <div data-menu className="relative">
+          <button
+            onClick={() => setMenuOpen((p) => !p)}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-xl transition-transform duration-300 active:scale-90"
+            style={{
+              filter: "drop-shadow(0 0 8px hsla(51,100%,50%,0.4))",
+            }}
+            aria-label="Menu de navigation"
           >
-            {/* Hand outline — elegant thin golden strokes */}
-            <g stroke="#FFD700" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.85">
-              {/* Palm */}
-              <path d="M 70 340 C 60 310, 55 270, 58 230 C 60 200, 65 175, 75 155 L 80 145" />
-              <path d="M 245 340 C 255 310, 258 270, 255 230 C 252 200, 248 180, 240 165" />
-              <path d="M 70 340 Q 155 370, 245 340" />
+            {menuOpen ? "✖️" : "🔮"}
+          </button>
 
-              {/* Index finger */}
-              <path d="M 80 145 C 78 120, 75 90, 73 60 C 72 42, 78 28, 88 28 C 98 28, 104 42, 103 60 C 101 80, 100 100, 98 120" />
-
-              {/* Middle finger */}
-              <path d="M 98 120 C 100 95, 105 60, 108 35 C 110 18, 118 5, 130 5 C 142 5, 148 18, 147 35 C 145 60, 142 95, 140 125" />
-
-              {/* Ring finger */}
-              <path d="M 140 125 C 145 95, 152 62, 158 40 C 161 25, 170 14, 180 14 C 190 14, 197 25, 195 40 C 192 62, 188 95, 185 130" />
-
-              {/* Pinky finger */}
-              <path d="M 185 130 C 192 105, 200 78, 208 58 C 212 46, 220 38, 228 40 C 236 42, 240 52, 237 65 C 233 82, 225 110, 240 165" />
-
-              {/* Thumb */}
-              <path d="M 75 230 C 55 235, 35 228, 25 210 C 18 195, 22 178, 35 172 C 48 166, 62 175, 65 190" />
-            </g>
-
-            {/* Sparkles */}
-            {sparkles.map((s) => (
-              <text
-                key={s.id}
-                x={s.x}
-                y={s.y}
-                fontSize={s.size}
-                className="pointer-events-none"
-                style={{ animation: "sparkle-svg 2s ease-out forwards" }}
+          {/* Dropdown */}
+          <div
+            className="absolute top-12 right-0 w-52 rounded-2xl overflow-hidden transition-all duration-300 origin-top-right"
+            style={{
+              background: "rgba(26, 10, 59, 0.92)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid hsla(51,100%,50%,0.2)",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+              transform: menuOpen ? "scale(1)" : "scale(0.9)",
+              opacity: menuOpen ? 1 : 0,
+              pointerEvents: menuOpen ? "auto" : "none",
+            }}
+          >
+            {menuItems.map((item, i) => (
+              <button
+                key={item.path}
+                onClick={() => { setMenuOpen(false); navigate(item.path); }}
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-body text-foreground transition-colors hover:bg-primary/10"
+                style={{
+                  borderBottom: i < menuItems.length - 1 ? "1px solid hsla(51,100%,50%,0.08)" : "none",
+                }}
               >
-                ✨
-              </text>
+                <span className="text-base">{item.icon}</span>
+                <span className="flex-1 text-left">{item.label}</span>
+                <span className="text-muted-foreground text-xs">→</span>
+              </button>
             ))}
-
-            {/* Palm lines with draw animation */}
-            {lines.map((line) => {
-              const isHovered = hoveredLine === line.id;
-              return (
-                <g key={line.id}>
-                  {/* Invisible wider hit area */}
-                  <path
-                    d={line.path}
-                    stroke="transparent"
-                    strokeWidth="20"
-                    fill="none"
-                    className="cursor-pointer"
-                    onMouseEnter={() => setHoveredLine(line.id)}
-                    onMouseLeave={() => setHoveredLine(null)}
-                    onClick={() => navigate(line.route)}
-                  />
-
-                  {/* Glow layer */}
-                  <path
-                    d={line.path}
-                    stroke={line.color}
-                    strokeWidth={isHovered ? "5" : "3"}
-                    strokeLinecap="round"
-                    fill="none"
-                    opacity={isHovered ? 0.5 : 0.15}
-                    style={{
-                      filter: `blur(${isHovered ? 6 : 3}px)`,
-                      transition: "all 0.3s ease",
-                    }}
-                    className="pointer-events-none"
-                  />
-
-                  {/* Main line */}
-                  <path
-                    d={line.path}
-                    stroke={line.color}
-                    strokeWidth={isHovered ? "3" : "2"}
-                    strokeLinecap="round"
-                    fill="none"
-                    className="pointer-events-none"
-                    style={{
-                      strokeDasharray: 300,
-                      strokeDashoffset: 300,
-                      animation: `draw-line 1.5s ease-out ${line.delay}s forwards`,
-                      filter: isHovered ? `drop-shadow(0 0 8px ${line.color})` : "none",
-                      transition: "filter 0.3s, stroke-width 0.3s",
-                    }}
-                  >
-                    {/* Idle shimmer */}
-                    <animate
-                      attributeName="opacity"
-                      values="0.7;1;0.7"
-                      dur="3s"
-                      begin={`${line.delay + 1.5}s`}
-                      repeatCount="indefinite"
-                    />
-                  </path>
-
-                  {/* Hover label */}
-                  {isHovered && (
-                    <foreignObject
-                      x={line.labelPos.x}
-                      y={line.labelPos.y}
-                      width="140"
-                      height="30"
-                      className="pointer-events-none"
-                    >
-                      <div
-                        className="font-body text-xs font-semibold px-2 py-1 rounded-lg text-center whitespace-nowrap"
-                        style={{
-                          background: "rgba(26, 10, 59, 0.85)",
-                          backdropFilter: "blur(8px)",
-                          border: `1px solid ${line.color}50`,
-                          color: line.color,
-                          animation: "fade-in-label 0.2s ease-out",
-                        }}
-                      >
-                        {line.label}
-                      </div>
-                    </foreignObject>
-                  )}
-                </g>
-              );
-            })}
-          </svg>
+          </div>
         </div>
+      </header>
 
-        {/* CTA Button */}
+      {/* ── Hand ── */}
+      <div
+        className="relative z-10 flex-1 flex items-center justify-center px-8"
+        style={{ animation: "float 3s ease-in-out infinite" }}
+      >
+        <div className="w-full" style={{ maxWidth: "320px" }}>
+          <HandSVG
+            hoveredLine={hoveredLine}
+            onLineHover={setHoveredLine}
+            onLineLeave={() => setHoveredLine(null)}
+            onLineClick={handleLineClick}
+          />
+        </div>
+      </div>
+
+      {/* ── CTA ── */}
+      <div className="relative z-10 flex justify-center px-6 pb-10">
         <button
           onClick={() => navigate("/scanner")}
-          className="w-full max-w-xs py-4 px-8 rounded-2xl font-body font-bold text-lg tracking-wide text-primary-foreground animate-glow-pulse transition-transform active:scale-95 mt-4"
+          className="w-full max-w-xs py-4 px-8 rounded-2xl font-display font-bold text-base tracking-wide text-primary-foreground animate-glow-pulse transition-transform active:scale-95"
           style={{ background: "var(--gradient-cta)" }}
         >
           🖐️ Révèle mes secrets
         </button>
       </div>
 
-      {/* Mini nav pills */}
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 px-3 py-2 rounded-2xl"
-        style={{
-          background: "rgba(26, 10, 59, 0.8)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid hsla(51,100%,50%,0.15)",
-        }}
-      >
-        {navItems.map((item) => (
-          <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            aria-label={item.label}
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm transition-all duration-200 hover:bg-primary/10 active:scale-90"
-          >
-            {item.icon}
-          </button>
-        ))}
-      </nav>
-
       <style>{`
         @keyframes draw-line {
           to { stroke-dashoffset: 0; }
         }
-        @keyframes sparkle-svg {
-          0% { opacity: 0; }
-          20% { opacity: 1; }
-          100% { opacity: 0; transform: translateY(-8px); }
-        }
-        @keyframes fade-in-label {
+        @keyframes label-in {
           from { opacity: 0; transform: translateY(4px); }
           to { opacity: 1; transform: translateY(0); }
         }
