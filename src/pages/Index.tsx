@@ -254,8 +254,9 @@ const Index = () => {
       </div>
 
       <style>{`
-        @keyframes draw-line {
-          to { stroke-dashoffset: 0; }
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
         }
         @keyframes label-in {
           from { opacity: 0; transform: translateY(4px); }
