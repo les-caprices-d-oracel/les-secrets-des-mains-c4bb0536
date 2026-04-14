@@ -230,11 +230,10 @@ const Index = () => {
 
       {/* ── Hand ── */}
       <div
-        className="relative z-10 flex-1 flex items-center justify-center px-8"
-        style={{ animation: "float 3s ease-in-out infinite" }}
+        className="relative z-10 flex-1 flex items-center justify-center px-6"
       >
-        <div className="w-full" style={{ maxWidth: "320px" }}>
-          <HandSVG
+        <div className="relative w-full" style={{ maxWidth: "340px", height: "55vh" }}>
+          <HandImage
             hoveredLine={hoveredLine}
             onLineHover={setHoveredLine}
             onLineLeave={() => setHoveredLine(null)}
