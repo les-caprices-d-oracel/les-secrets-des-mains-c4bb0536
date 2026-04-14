@@ -9,6 +9,9 @@ import Scanner from "./pages/Scanner.tsx";
 import Lectures from "./pages/Lectures.tsx";
 import LigneSignification from "./pages/LigneSignification.tsx";
 import Resultat from "./pages/Resultat.tsx";
+import MentionsLegales from "./pages/MentionsLegales.tsx";
+import Confidentialite from "./pages/Confidentialite.tsx";
+import CGU from "./pages/CGU.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,10 @@ const App = () => (
           <Route path="/lectures" element={<RequireOnboarding><Lectures /></RequireOnboarding>} />
           <Route path="/ligne/:ligne" element={<RequireOnboarding><LigneSignification /></RequireOnboarding>} />
           <Route path="/resultat" element={<RequireOnboarding><Resultat /></RequireOnboarding>} />
+          {/* Legal pages - accessible without onboarding */}
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/confidentialite" element={<Confidentialite />} />
+          <Route path="/cgu" element={<CGU />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
