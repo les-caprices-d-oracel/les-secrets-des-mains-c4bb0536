@@ -9,6 +9,9 @@ import Scanner from "./pages/Scanner.tsx";
 import Lectures from "./pages/Lectures.tsx";
 import LigneSignification from "./pages/LigneSignification.tsx";
 import Resultat from "./pages/Resultat.tsx";
+import MentionsLegales from "./pages/MentionsLegales.tsx";
+import Confidentialite from "./pages/Confidentialite.tsx";
+import CGU from "./pages/CGU.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
