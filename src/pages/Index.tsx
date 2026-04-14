@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import handImage from "@/assets/hand-main.png";
 
 /* ── Palm line definitions ── */
@@ -156,6 +157,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   // Close menu on outside click
   useEffect(() => {
@@ -243,7 +245,7 @@ const Index = () => {
       </div>
 
       {/* ── CTA ── */}
-      <div className="relative z-10 flex justify-center px-6 pb-10">
+      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-10">
         <button
           onClick={() => navigate("/scanner")}
           className="w-full max-w-xs py-4 px-8 rounded-2xl font-display font-bold text-base tracking-wide text-primary-foreground animate-glow-pulse transition-transform active:scale-95"
@@ -251,7 +253,45 @@ const Index = () => {
         >
           🖐️ Révèle mes secrets
         </button>
+        <button
+          onClick={() => setShowHowItWorks(true)}
+          className="text-xs text-muted-foreground hover:text-primary transition-colors font-body flex items-center gap-1.5 opacity-70 hover:opacity-100"
+        >
+          <span>❓</span> Comment ça marche ?
+        </button>
       </div>
+
+      {/* ── How it works modal ── */}
+      <Dialog open={showHowItWorks} onOpenChange={setShowHowItWorks}>
+        <DialogContent className="rounded-2xl border-primary/20 max-w-sm" style={{ background: "rgba(26, 10, 59, 0.97)", backdropFilter: "blur(20px)" }}>
+          <DialogHeader>
+            <DialogTitle className="font-display text-primary text-center text-xl">✨ Comment ça marche ?</DialogTitle>
+            <DialogDescription className="text-muted-foreground text-center text-sm">Découvre les secrets de ta main en 3 étapes</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {[
+              { icon: "🖐️", title: "Scanne ta main", desc: "Place ta main devant la caméra pour capturer ses lignes." },
+              { icon: "🔮", title: "Analyse mystique", desc: "Notre oracle analyse les 4 lignes principales de ta paume." },
+              { icon: "📜", title: "Découvre ton destin", desc: "Reçois ta lecture personnalisée et sauvegarde-la en PDF." },
+            ].map((step, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="text-2xl shrink-0">{step.icon}</span>
+                <div>
+                  <p className="font-body font-semibold text-sm text-foreground">{step.title}</p>
+                  <p className="font-body text-xs text-muted-foreground">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setShowHowItWorks(false)}
+            className="w-full py-3 rounded-xl font-display font-bold text-sm text-primary-foreground mt-2 transition-transform active:scale-95"
+            style={{ background: "var(--gradient-cta)" }}
+          >
+            🌙 C'est compris !
+          </button>
+        </DialogContent>
+      </Dialog>
 
       <style>{`
         @keyframes pulse-glow {
