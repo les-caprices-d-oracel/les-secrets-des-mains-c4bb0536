@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
 import LegalFooter from "@/components/LegalFooter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import handImage from "@/assets/hand-main.png";
+import handImage from "/images/main-droite.png";
 
 /* ── Palm line definitions ── */
 const palmLines = [
@@ -52,20 +52,22 @@ const MenuIcon = ({ open }: { open: boolean }) => open ? (
 
 /* ── Interactive Hand Image ── */
 const HandImage = ({
-  hoveredLine, onLineHover, onLineLeave, onLineClick,
+  isLeft = false, hoveredLine, onLineHover, onLineLeave, onLineClick,
 }: {
   hoveredLine: string | null;
   onLineHover: (id: string) => void;
   onLineLeave: () => void;
   onLineClick: (route: string) => void;
+    isLeft?: boolean;
 }) => (
-  <div className="relative w-full h-full flex items-center justify-center">
+<div className="relative w-full h-full flex items-center justify-center rounded-lg" style={{ backgroundColor: "transparent" }}>
     <img
       src={handImage}
       alt="Main avec lignes de chiromancie"
       className="w-full h-auto object-contain"
-      style={{ maxWidth: "100%", maxHeight: "100%" }}
+      style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "8px", boxShadow: "0 20px 40px rgba(0,0,0,0.3)", transform: isLeft ? "scaleX(-1)" : "none" }}
     />
+<div className="absolute inset-0 bg-white rounded-lg" style={{ mixBlendMode: "screen", pointerEvents: "none" }} />
     <svg
       viewBox="0 0 300 500"
       className="absolute inset-0 w-full h-full"
@@ -244,13 +246,19 @@ const Index = () => {
       <div className="relative z-10 flex-1 flex items-center justify-center px-6" style={{ marginTop: "-8px" }}>
         <div className="relative w-full" style={{ maxWidth: "320px", height: "52vh" }}>
           <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, rgba(30, 80, 60, 0.12) 0%, transparent 70%)", filter: "blur(40px)" }} />
-          <HandImage
-            hoveredLine={hoveredLine}
-            onLineHover={setHoveredLine}
-            onLineLeave={() => setHoveredLine(null)}
-            onLineClick={handleLineClick}
-          />
-        </div>
+<HandImage
+  hoveredLine={hoveredLine}
+  onLineHover={setHoveredLine}
+  onLineLeave={() => setHoveredLine(null)}
+  onLineClick={handleLineClick}
+/>
+<HandImage
+  isLeft={true}
+  hoveredLine={hoveredLine}
+  onLineHover={setHoveredLine}
+  onLineLeave={() => setHoveredLine(null)}
+  onLineClick={handleLineClick}
+/>
       </div>
 
       {/* ── Line legend ── */}
@@ -367,6 +375,7 @@ const Index = () => {
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
+    </div>
     </div>
   );
 };
