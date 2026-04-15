@@ -293,6 +293,17 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Footer légal */}
+      <footer className="relative z-10 w-full py-6 mt-auto">
+        <div className="flex justify-center gap-4 flex-wrap px-4">
+          <a href="/mentions-legales" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">Mentions légales</a>
+          <span className="text-muted-foreground/30 text-[10px]">•</span>
+          <a href="/cgu" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">CGU</a>
+          <span className="text-muted-foreground/30 text-[10px]">•</span>
+          <a href="/confidentialite" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">Confidentialité</a>
+        </div>
+      </footer>
+
       <style>{`
         @keyframes pulse-glow {
           0%, 100% { opacity: 0.6; }
