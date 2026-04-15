@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PageTransition from "@/components/PageTransition";
 import Index from "./pages/Index.tsx";
 import Onboarding from "./pages/Onboarding.tsx";
 import Scanner from "./pages/Scanner.tsx";
@@ -22,26 +24,34 @@ const RequireOnboarding = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/onboarding" element={<PageTransition><Onboarding /></PageTransition>} />
+        <Route path="/" element={<RequireOnboarding><PageTransition><Index /></PageTransition></RequireOnboarding>} />
+        <Route path="/scanner" element={<RequireOnboarding><PageTransition><Scanner /></PageTransition></RequireOnboarding>} />
+        <Route path="/lectures" element={<RequireOnboarding><PageTransition><Lectures /></PageTransition></RequireOnboarding>} />
+        <Route path="/ligne/:ligne" element={<RequireOnboarding><PageTransition><LigneSignification /></PageTransition></RequireOnboarding>} />
+        <Route path="/resultat" element={<RequireOnboarding><PageTransition><Resultat /></PageTransition></RequireOnboarding>} />
+        <Route path="/mentions-legales" element={<PageTransition><MentionsLegales /></PageTransition>} />
+        <Route path="/confidentialite" element={<PageTransition><Confidentialite /></PageTransition>} />
+        <Route path="/cgu" element={<PageTransition><CGU /></PageTransition>} />
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/" element={<RequireOnboarding><Index /></RequireOnboarding>} />
-          <Route path="/scanner" element={<RequireOnboarding><Scanner /></RequireOnboarding>} />
-          <Route path="/lectures" element={<RequireOnboarding><Lectures /></RequireOnboarding>} />
-          <Route path="/ligne/:ligne" element={<RequireOnboarding><LigneSignification /></RequireOnboarding>} />
-          <Route path="/resultat" element={<RequireOnboarding><Resultat /></RequireOnboarding>} />
-          {/* Legal pages - accessible without onboarding */}
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/confidentialite" element={<Confidentialite />} />
-          <Route path="/cgu" element={<CGU />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
