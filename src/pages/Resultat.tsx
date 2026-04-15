@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
+import LegalFooter from "@/components/LegalFooter";
 
 const lignes = [
   {
@@ -139,6 +140,8 @@ const Resultat = () => {
           🔗 Partager mon résultat
         </button>
       </div>
+
+      <LegalFooter />
 
       <style>{`
         @keyframes fadeSlideUp {
