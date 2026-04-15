@@ -8,60 +8,51 @@ import handImage from "@/assets/hand-main.png";
 /* ── Palm line definitions ── */
 const palmLines = [
   {
-    id: "vie",
-    label: "Ligne de Vie ✨",
-    color: "#00C853",
-    delay: 0,
-    route: "/ligne/vie",
-    // Hit area for life line (curved around thumb)
+    id: "vie", label: "Ligne de Vie", color: "#34d399", delay: 0, route: "/ligne/vie",
     path: "M 60 220 C 50 260, 55 320, 75 380 C 85 400, 95 415, 110 420",
     labelPos: { x: 15, y: 310 },
   },
   {
-    id: "coeur",
-    label: "Ligne de Cœur 💕",
-    color: "#FF4081",
-    delay: 2,
-    route: "/ligne/coeur",
-    // Hit area for heart line (horizontal across top)
+    id: "coeur", label: "Ligne de Cœur", color: "#f9a8d4", delay: 2, route: "/ligne/coeur",
     path: "M 220 180 C 190 165, 150 160, 110 165 C 85 170, 65 178, 50 190",
     labelPos: { x: 120, y: 135 },
   },
   {
-    id: "tete",
-    label: "Ligne de Tête 🧠",
-    color: "#7C4DFF",
-    delay: 4,
-    route: "/ligne/tete",
-    // Hit area for head line (middle horizontal)
+    id: "tete", label: "Ligne de Tête", color: "#c4b5fd", delay: 4, route: "/ligne/tete",
     path: "M 60 245 C 90 250, 140 255, 180 260 C 210 265, 235 275, 250 285",
     labelPos: { x: 140, y: 230 },
   },
   {
-    id: "destin",
-    label: "Ligne du Destin 🌟",
-    color: "#FFD700",
-    delay: 6,
-    route: "/ligne/destin",
-    // Hit area for fate line (vertical center)
+    id: "destin", label: "Ligne du Destin", color: "#fcd34d", delay: 6, route: "/ligne/destin",
     path: "M 160 420 C 158 380, 155 320, 153 260 C 151 210, 150 170, 152 140",
     labelPos: { x: 165, y: 280 },
   },
 ];
 
 const menuItems = [
-  { icon: "🏠", label: "Accueil", path: "/" },
-  { icon: "🕐", label: "Historique", path: "/historique" },
-  { icon: "👤", label: "Profil", path: "/profil" },
-  { icon: "👑", label: "Nos Offres", path: "/lectures" },
+  { label: "Accueil", path: "/" },
+  { label: "Historique", path: "/historique" },
+  { label: "Profil", path: "/profil" },
+  { label: "Nos Offres", path: "/lectures" },
 ];
 
-/* ── Interactive Hand Image with Line Hotspots ── */
+/* ── MenuIcon ── */
+const MenuIcon = ({ open }: { open: boolean }) => open ? (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+    <line x1="4" y1="4" x2="14" y2="14" />
+    <line x1="14" y1="4" x2="4" y2="14" />
+  </svg>
+) : (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+    <line x1="3" y1="5" x2="15" y2="5" />
+    <line x1="3" y1="9" x2="15" y2="9" />
+    <line x1="3" y1="13" x2="15" y2="13" />
+  </svg>
+);
+
+/* ── Interactive Hand Image ── */
 const HandImage = ({
-  hoveredLine,
-  onLineHover,
-  onLineLeave,
-  onLineClick,
+  hoveredLine, onLineHover, onLineLeave, onLineClick,
 }: {
   hoveredLine: string | null;
   onLineHover: (id: string) => void;
@@ -69,24 +60,20 @@ const HandImage = ({
   onLineClick: (route: string) => void;
 }) => (
   <div className="relative w-full h-full flex items-center justify-center">
-    {/* Main Hand Image */}
     <img
       src={handImage}
       alt="Main avec lignes de chiromancie"
       className="w-full h-auto object-contain"
       style={{ maxWidth: "100%", maxHeight: "100%" }}
     />
-    
-    {/* SVG Overlay for Interactive Hotspots */}
-    <svg 
-      viewBox="0 0 300 500" 
+    <svg
+      viewBox="0 0 300 500"
       className="absolute inset-0 w-full h-full"
-      fill="none" 
+      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ pointerEvents: "none" }}
     >
       <defs>
-        {/* Glow filters for hover effects */}
         {palmLines.map((l) => (
           <filter key={l.id} id={`glow-${l.id}`} x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation={hoveredLine === l.id ? "8" : "4"} result="blur" />
@@ -97,11 +84,8 @@ const HandImage = ({
           </filter>
         ))}
       </defs>
-
-      {/* Interactive hit areas (invisible but clickable) */}
       {palmLines.map((line) => (
         <g key={line.id} style={{ pointerEvents: "auto" }}>
-          {/* Invisible hit area */}
           <path
             d={line.path}
             stroke="transparent"
@@ -110,10 +94,9 @@ const HandImage = ({
             className="cursor-pointer"
             onMouseEnter={() => onLineHover(line.id)}
             onMouseLeave={onLineLeave}
+            onTouchStart={() => onLineHover(line.id)}
             onClick={() => onLineClick(line.route)}
           />
-          
-          {/* Visible glow line on hover */}
           {hoveredLine === line.id && (
             <path
               d={line.path}
@@ -128,18 +111,16 @@ const HandImage = ({
               }}
             />
           )}
-
-          {/* Hover label */}
           {hoveredLine === line.id && (
             <foreignObject x={line.labelPos.x} y={line.labelPos.y} width="150" height="40" className="pointer-events-none">
               <div
                 className="font-body text-xs font-semibold px-3 py-2 rounded-lg text-center whitespace-nowrap w-fit"
                 style={{
-                  background: "rgba(26, 10, 59, 0.95)",
+                  background: "rgba(10, 10, 20, 0.92)",
                   backdropFilter: "blur(12px)",
-                  border: `2px solid ${line.color}`,
+                  border: `1px solid ${line.color}44`,
                   color: line.color,
-                  boxShadow: `0 0 20px ${line.color}66`,
+                  boxShadow: `0 0 20px ${line.color}33`,
                   animation: "label-in 0.2s ease-out",
                 }}
               >
@@ -160,7 +141,6 @@ const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
-  // Close menu on outside click
   useEffect(() => {
     if (!menuOpen) return;
     const handler = (e: MouseEvent) => {
@@ -170,45 +150,63 @@ const Index = () => {
     return () => document.removeEventListener("click", handler);
   }, [menuOpen]);
 
-  const handleLineClick = useCallback(
-    (route: string) => navigate(route),
-    [navigate]
-  );
+  const handleLineClick = useCallback((route: string) => navigate(route), [navigate]);
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden">
+
+      {/* ── Atmospheric background ── */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(30, 60, 90, 0.25) 0%, transparent 60%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 20% 80%, rgba(20, 80, 60, 0.12) 0%, transparent 50%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 80% 60%, rgba(80, 40, 100, 0.08) 0%, transparent 50%)" }} />
+      </div>
+
       <StarField />
 
       {/* ── Header ── */}
-      <header className="relative z-20 flex items-center justify-between px-5 pt-6">
-        <h1 className="font-display text-lg text-primary leading-tight drop-shadow-[0_0_15px_hsla(51,100%,50%,0.35)]">
-          Les Secrets
-          <br />
-          des Mains
-        </h1>
+      <header className="relative z-20 flex items-center justify-between px-5 pt-6 pb-2">
+        <div className="flex flex-col">
+          <span
+            className="font-body uppercase tracking-[0.25em]"
+            style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.25)", letterSpacing: "0.25em" }}
+          >
+            Chiromancerie · IA
+          </span>
+          <h1
+            className="font-display leading-tight"
+            style={{ fontSize: "1.35rem", color: "rgba(255,255,255,0.88)", letterSpacing: "0.02em" }}
+          >
+            Les Secrets
+            <br />
+            des Mains
+          </h1>
+        </div>
 
-        {/* Magic menu button */}
+        {/* Menu */}
         <div data-menu className="relative">
           <button
             onClick={() => setMenuOpen((p) => !p)}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-xl transition-transform duration-300 active:scale-90"
+            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90"
             style={{
-              filter: "drop-shadow(0 0 8px hsla(51,100%,50%,0.4))",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(255,255,255,0.7)",
             }}
             aria-label="Menu de navigation"
+            aria-expanded={menuOpen}
           >
-            {menuOpen ? "✖️" : "🔮"}
+            <MenuIcon open={menuOpen} />
           </button>
 
-          {/* Dropdown */}
           <div
-            className="absolute top-12 right-0 w-52 rounded-2xl overflow-hidden transition-all duration-300 origin-top-right"
+            className="absolute top-12 right-0 w-48 rounded-xl overflow-hidden transition-all duration-200 origin-top-right"
             style={{
-              background: "rgba(26, 10, 59, 0.92)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid hsla(51,100%,50%,0.2)",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
-              transform: menuOpen ? "scale(1)" : "scale(0.9)",
+              background: "rgba(12, 12, 20, 0.95)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.6)",
+              transform: menuOpen ? "scale(1)" : "scale(0.95)",
               opacity: menuOpen ? 1 : 0,
               pointerEvents: menuOpen ? "auto" : "none",
             }}
@@ -217,25 +215,35 @@ const Index = () => {
               <button
                 key={item.path}
                 onClick={() => { setMenuOpen(false); navigate(item.path); }}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-body text-foreground transition-colors hover:bg-primary/10"
+                className="w-full flex items-center justify-between px-4 py-3 font-body transition-colors"
                 style={{
-                  borderBottom: i < menuItems.length - 1 ? "1px solid hsla(51,100%,50%,0.08)" : "none",
+                  fontSize: "0.83rem",
+                  color: "rgba(255,255,255,0.6)",
+                  borderBottom: i < menuItems.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
                 }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
               >
-                <span className="text-base">{item.icon}</span>
-                <span className="flex-1 text-left">{item.label}</span>
-                <span className="text-muted-foreground text-xs">→</span>
+                {item.label}
+                <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.9rem" }}>›</span>
               </button>
             ))}
           </div>
         </div>
       </header>
 
-      {/* ── Hand ── */}
-      <div
-        className="relative z-10 flex-1 flex items-center justify-center px-6"
+      {/* ── Tagline ── */}
+      <p
+        className="relative z-10 text-center font-body px-8"
+        style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)", letterSpacing: "0.02em", marginTop: "4px" }}
       >
-        <div className="relative w-full" style={{ maxWidth: "340px", height: "55vh" }}>
+        Explore tes lignes. Révèle ce qu'elles gardent.
+      </p>
+
+      {/* ── Hand hero ── */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-6" style={{ marginTop: "-8px" }}>
+        <div className="relative w-full" style={{ maxWidth: "320px", height: "52vh" }}>
+          <div className="absolute inset-0 rounded-full" style={{ background: "radial-gradient(circle, rgba(30, 80, 60, 0.12) 0%, transparent 70%)", filter: "blur(40px)" }} />
           <HandImage
             hoveredLine={hoveredLine}
             onLineHover={setHoveredLine}
@@ -245,51 +253,104 @@ const Index = () => {
         </div>
       </div>
 
+      {/* ── Line legend ── */}
+      <div className="relative z-10 flex justify-center gap-6 px-6 pb-4">
+        {palmLines.map((line) => (
+          <button
+            key={line.id}
+            onClick={() => navigate(line.route)}
+            className="flex flex-col items-center gap-1 transition-all duration-200 active:scale-95"
+            style={{ opacity: hoveredLine === line.id ? 1 : 0.4 }}
+            onMouseEnter={() => setHoveredLine(line.id)}
+            onMouseLeave={() => setHoveredLine(null)}
+            aria-label={line.label}
+          >
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: line.color, boxShadow: `0 0 8px ${line.color}55` }} />
+            <span className="font-body" style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.45)" }}>
+              {line.id === "vie" ? "Vie" : line.id === "coeur" ? "Cœur" : line.id === "tete" ? "Tête" : "Destin"}
+            </span>
+          </button>
+        ))}
+      </div>
+
       {/* ── CTA ── */}
-      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-10">
+      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-8">
         <button
           onClick={() => navigate("/scanner")}
-          className="w-full max-w-xs py-4 px-8 rounded-2xl font-display font-bold text-base tracking-wide text-primary-foreground animate-glow-pulse transition-transform active:scale-95"
-          style={{ background: "var(--gradient-cta)" }}
+          className="w-full max-w-xs font-body font-semibold uppercase tracking-widest transition-all duration-200 active:scale-95"
+          style={{
+            padding: "16px 32px",
+            borderRadius: "14px",
+            fontSize: "0.72rem",
+            letterSpacing: "0.2em",
+            background: "rgba(18, 155, 105, 0.88)",
+            color: "rgba(255,255,255,0.97)",
+            border: "1px solid rgba(40, 200, 140, 0.28)",
+            boxShadow: "0 0 50px rgba(18, 155, 105, 0.22), 0 8px 24px rgba(0,0,0,0.5)",
+          }}
         >
-          🖐️ Révèle mes secrets
+          Révèle mes secrets
         </button>
         <button
           onClick={() => setShowHowItWorks(true)}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors font-body flex items-center gap-1.5 opacity-70 hover:opacity-100"
+          className="font-body transition-opacity hover:opacity-70"
+          style={{ fontSize: "0.73rem", color: "rgba(255,255,255,0.28)", letterSpacing: "0.03em" }}
         >
-          <span>❓</span> Comment ça marche ?
+          Comment ça marche ?
         </button>
       </div>
 
       {/* ── How it works modal ── */}
       <Dialog open={showHowItWorks} onOpenChange={setShowHowItWorks}>
-        <DialogContent className="rounded-2xl border-primary/20 max-w-sm" style={{ background: "rgba(26, 10, 59, 0.97)", backdropFilter: "blur(20px)" }}>
+        <DialogContent
+          className="rounded-2xl max-w-sm border-0"
+          style={{ background: "rgba(12, 12, 20, 0.97)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.06)" }}
+        >
           <DialogHeader>
-            <DialogTitle className="font-display text-primary text-center text-xl">✨ Comment ça marche ?</DialogTitle>
-            <DialogDescription className="text-muted-foreground text-center text-sm">Découvre les secrets de ta main en 3 étapes</DialogDescription>
+            <DialogTitle className="font-display text-center" style={{ fontSize: "1.1rem", color: "rgba(255,255,255,0.85)" }}>
+              Comment ça marche ?
+            </DialogTitle>
+            <DialogDescription className="text-center font-body" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
+              Trois étapes pour lire ta paume
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             {[
-              { icon: "🖐️", title: "Scanne ta main", desc: "Place ta main devant la caméra pour capturer ses lignes." },
-              { icon: "🔮", title: "Analyse mystique", desc: "Notre oracle analyse les 4 lignes principales de ta paume." },
-              { icon: "📜", title: "Découvre ton destin", desc: "Reçois ta lecture personnalisée et sauvegarde-la en PDF." },
+              { num: "01", title: "Scanne ta main", desc: "Place ta main devant la caméra pour capturer ses lignes." },
+              { num: "02", title: "Analyse mystique", desc: "Notre oracle analyse les 4 lignes principales de ta paume." },
+              { num: "03", title: "Découvre ton destin", desc: "Reçois ta lecture personnalisée et sauvegarde-la en PDF." },
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="text-2xl shrink-0">{step.icon}</span>
+                <span
+                  className="font-body font-bold shrink-0"
+                  style={{ fontSize: "0.7rem", color: "rgba(52, 211, 153, 0.6)", marginTop: "2px" }}
+                >
+                  {step.num}
+                </span>
                 <div>
-                  <p className="font-body font-semibold text-sm text-foreground">{step.title}</p>
-                  <p className="font-body text-xs text-muted-foreground">{step.desc}</p>
+                  <p className="font-body font-semibold" style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.75)" }}>
+                    {step.title}
+                  </p>
+                  <p className="font-body" style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", lineHeight: "1.5" }}>
+                    {step.desc}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
           <button
             onClick={() => setShowHowItWorks(false)}
-            className="w-full py-3 rounded-xl font-display font-bold text-sm text-primary-foreground mt-2 transition-transform active:scale-95"
-            style={{ background: "var(--gradient-cta)" }}
+            className="w-full font-body font-medium transition-all active:scale-95 mt-2"
+            style={{
+              padding: "12px",
+              borderRadius: "12px",
+              fontSize: "0.8rem",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: "rgba(255,255,255,0.55)",
+            }}
           >
-            🌙 C'est compris !
+            Compris
           </button>
         </DialogContent>
       </Dialog>
@@ -298,11 +359,11 @@ const Index = () => {
 
       <style>{`
         @keyframes pulse-glow {
-          0%, 100% { opacity: 0.6; }
+          0%, 100% { opacity: 0.55; }
           50% { opacity: 1; }
         }
         @keyframes label-in {
-          from { opacity: 0; transform: translateY(4px); }
+          from { opacity: 0; transform: translateY(5px); }
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
