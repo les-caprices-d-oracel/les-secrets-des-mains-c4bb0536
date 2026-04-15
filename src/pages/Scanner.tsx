@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
+import LegalFooter from "@/components/LegalFooter";
 
 const Scanner = () => {
   const navigate = useNavigate();
@@ -123,6 +124,8 @@ const Scanner = () => {
           )}
         </button>
       </div>
+
+      <LegalFooter />
 
       <style>{`
         @keyframes scan-pulse {

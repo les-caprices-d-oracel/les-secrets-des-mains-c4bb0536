@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
+import LegalFooter from "@/components/LegalFooter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import handImage from "@/assets/hand-main.png";
 
@@ -293,16 +294,7 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Footer légal */}
-      <footer className="relative z-10 w-full py-6 mt-auto">
-        <div className="flex justify-center gap-4 flex-wrap px-4">
-          <a href="/mentions-legales" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">Mentions légales</a>
-          <span className="text-muted-foreground/30 text-[10px]">•</span>
-          <a href="/cgu" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">CGU</a>
-          <span className="text-muted-foreground/30 text-[10px]">•</span>
-          <a href="/confidentialite" className="text-[10px] font-body text-muted-foreground/60 hover:text-primary transition-colors">Confidentialité</a>
-        </div>
-      </footer>
+      <LegalFooter />
 
       <style>{`
         @keyframes pulse-glow {
