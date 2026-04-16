@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
 import LegalFooter from "@/components/LegalFooter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import handImage from "/images/main-droite.png";
+import handImage from "@/assets/hand-main.png";
 
 /* ── Palm line definitions ── */
 const palmLines = [
