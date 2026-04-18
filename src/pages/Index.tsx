@@ -4,6 +4,7 @@ import StarField from "@/components/StarField";
 import LegalFooter from "@/components/LegalFooter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import handImage from "@/assets/hand-main.png";
+import NewsletterForm from "@/components/ui/NewsletterForm";
 
 const palmLines = [
   { id: "vie", label: "Ligne de Vie", color: "#34d399", delay: 0, route: "/ligne/vie", path: "M 60 220 C 50 260, 55 320, 75 380 C 85 400, 95 415, 110 420", labelPos: { x: 15, y: 310 } },
@@ -221,6 +222,11 @@ const Index = () => {
           Comment ça marche ?
         </button>
       </div>
+
+      {/* ── Newsletter ── */}
+      <section className="relative z-10 w-full flex flex-col items-center px-6 py-8">
+        <NewsletterForm />
+      </section>
 
       <HandChoiceDialog open={showHandChoice} onOpenChange={setShowHandChoice} onChoose={handleHandChoice} />
 
