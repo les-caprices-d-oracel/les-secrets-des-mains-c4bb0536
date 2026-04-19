@@ -4,7 +4,7 @@ import StarField from "@/components/StarField";
 import LegalFooter from "@/components/LegalFooter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import handImage from "@/assets/hand-main.png";
-import NewsletterForm from "@/components/ui/NewsletterForm";
+import NewsletterForm from "@/components/NewsletterForm";
 
 const palmLines = [
   { id: "vie", label: "Ligne de Vie", color: "#34d399", delay: 0, route: "/ligne/vie", path: "M 60 220 C 50 260, 55 320, 75 380 C 85 400, 95 415, 110 420", labelPos: { x: 15, y: 310 } },
