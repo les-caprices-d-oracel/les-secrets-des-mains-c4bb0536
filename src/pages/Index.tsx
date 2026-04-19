@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import StarField from "@/components/StarField";
 import LegalFooter from "@/components/LegalFooter";
 import NewsletterForm from "@/components/NewsletterForm";
+import AvatarDisplay from "@/components/AvatarDisplay";
+import { loadAvatar, AvatarConfig } from "@/lib/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const menuItems = [
@@ -86,6 +88,7 @@ const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showHandChoice, setShowHandChoice] = useState(false);
   const [readingsCount, setReadingsCount] = useState(0);
+  const [avatar, setAvatar] = useState<AvatarConfig | null>(null);
 
   useEffect(() => {
     try {
@@ -94,6 +97,10 @@ const Index = () => {
     } catch {
       setReadingsCount(0);
     }
+    setAvatar(loadAvatar());
+    const onUpdate = () => setAvatar(loadAvatar());
+    window.addEventListener("avatar-updated", onUpdate);
+    return () => window.removeEventListener("avatar-updated", onUpdate);
   }, []);
 
   useEffect(() => {
@@ -137,20 +144,31 @@ const Index = () => {
 
       {/* Header */}
       <header className="relative z-20 flex items-center justify-between px-5 pt-5 pb-2">
-        <div
-          className="flex items-center justify-center"
+        <button
+          onClick={() => navigate("/avatar")}
+          className="flex items-center justify-center overflow-hidden transition-all active:scale-90 hover:brightness-110"
           style={{
             width: "44px",
             height: "44px",
-            borderRadius: "12px",
-            background: "#f97316",
-            boxShadow: "0 8px 24px rgba(249,115,22,0.35)",
+            borderRadius: avatar ? "50%" : "12px",
+            background: avatar
+              ? "linear-gradient(135deg, rgba(252,211,77,0.2), rgba(120,60,220,0.2))"
+              : "#f97316",
+            boxShadow: avatar
+              ? "0 4px 16px rgba(252,211,77,0.35), inset 0 0 0 2px rgba(252,211,77,0.6)"
+              : "0 8px 24px rgba(249,115,22,0.35)",
             fontSize: "1.4rem",
           }}
-          aria-label="Logo"
+          aria-label={avatar ? "Modifier mon avatar" : "Créer mon avatar"}
         >
-          🤚
-        </div>
+          {avatar ? (
+            <div style={{ marginTop: "8px" }}>
+              <AvatarDisplay config={avatar} size={48} />
+            </div>
+          ) : (
+            "🤚"
+          )}
+        </button>
 
         <div data-menu className="relative">
           <button
