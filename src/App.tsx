@@ -14,6 +14,7 @@ import Resultat from "./pages/Resultat.tsx";
 import MentionsLegales from "./pages/MentionsLegales.tsx";
 import Confidentialite from "./pages/Confidentialite.tsx";
 import CGU from "./pages/CGU.tsx";
+import Avatar from "./pages/Avatar.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
         <Route path="/mentions-legales" element={<PageTransition><MentionsLegales /></PageTransition>} />
         <Route path="/confidentialite" element={<PageTransition><Confidentialite /></PageTransition>} />
         <Route path="/cgu" element={<PageTransition><CGU /></PageTransition>} />
+        <Route path="/avatar" element={<RequireOnboarding><PageTransition><Avatar /></PageTransition></RequireOnboarding>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
