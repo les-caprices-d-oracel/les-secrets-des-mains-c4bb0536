@@ -39,7 +39,7 @@ const HandImage = ({ hoveredLine, onLineHover, onLineLeave, onLineClick }: {
   <div className="relative w-full h-full flex items-center justify-center rounded-lg" style={{ backgroundColor: "transparent" }}>
     <img src={handImage} alt="Main avec lignes de chiromancie" className="w-full h-auto object-contain"
       style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "8px", boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }} />
-    <div className="absolute inset-0 bg-white rounded-lg" style={{ mixBlendMode: "screen", pointerEvents: "none" }} />
+    {/* overlay retiré : il blanchissait totalement l'image (screen + blanc = blanc) */}
     <svg viewBox="0 0 300 500" className="absolute inset-0 w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: "none" }}>
       <defs>
         {palmLines.map((l) => (
