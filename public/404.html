@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>Les Secrets des Mains</title>
     <script>
-      // Single Page Apps for GitHub Pages
-      // https://github.com/rafgraph/spa-github-pages
       (function(l) {
         if (l.search[1] === '/' ) {
           var decoded = l.search.slice(1).split('&').map(function(s) { 
@@ -22,14 +20,17 @@
       var repo = 'les-secrets-des-mains-c4bb0536';
       var base = 'https://les-caprices-d-oracel.github.io/' + repo;
       var path = l.pathname;
-      if (!path.startsWith('/' + repo)) {
+      // If we are not under the repo path, redirect to the correct repo
+      if (!path.startsWith('/' + repo) && path !== '/') {
         window.location.replace(base + path);
-      } else {
-        var pagePath = path.replace('/' + repo, '');
-        if (pagePath === '' || pagePath === '/' || pagePath === '/index.html') {
-          window.location.replace(base + '/lectures');
-        }
       }
+      // If we are at the root or index, redirect to /lectures
+      else if (path === '/' + repo || path === '/' + repo + '/' || path === '/' + repo + '/index.html') {
+        window.location.replace(base + '/lectures');
+      }
+      // Otherwise, we are on a valid subpath - just let the app load normally
+      // The 404.html is served by GitHub Pages for subpaths that don't exist as files,
+      // but the SPA router handles them. No redirect needed.
     </script>
   </head>
   <body>Redirecting...</body>
