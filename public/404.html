@@ -6,7 +6,7 @@
     <script>
       (function(l) {
         if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
+          var decoded = l.search.slice(1).split('&').map(function(s) {
             return s.replace(/~and~/g, '&')
           }).join('?');
           window.history.replaceState(null, null,
@@ -14,23 +14,14 @@
           );
         }
       }(window.location))
-    </script>
-    <script type="text/javascript">
-      var l = window.location;
+      // Redirect to index.html so React Router can handle the path
+      var path = window.location.pathname;
       var repo = 'les-secrets-des-mains-c4bb0536';
-      var base = 'https://les-caprices-d-oracel.github.io/' + repo;
-      var path = l.pathname;
-      // If we are not under the repo path, redirect to the correct repo
-      if (!path.startsWith('/' + repo) && path !== '/') {
-        window.location.replace(base + path);
+      // Remove the 404.html from path and redirect to index.html
+      var newPath = path.replace(/404\.html$/, 'index.html');
+      if (newPath !== path) {
+        window.location.replace(newPath + window.location.search + window.location.hash);
       }
-      // If we are at the root or index, redirect to /lectures
-      else if (path === '/' + repo || path === '/' + repo + '/' || path === '/' + repo + '/index.html') {
-        window.location.replace(base + '/lectures');
-      }
-      // Otherwise, we are on a valid subpath - just let the app load normally
-      // The 404.html is served by GitHub Pages for subpaths that don't exist as files,
-      // but the SPA router handles them. No redirect needed.
     </script>
   </head>
   <body>Redirecting...</body>
