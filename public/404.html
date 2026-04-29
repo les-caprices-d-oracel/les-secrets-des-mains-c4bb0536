@@ -5,7 +5,6 @@
     <title>Les Secrets des Mains</title>
     <script>
       // Single Page Apps for GitHub Pages
-      // MIT License
       // https://github.com/rafgraph/spa-github-pages
       (function(l) {
         if (l.search[1] === '/' ) {
@@ -19,11 +18,19 @@
       }(window.location))
     </script>
     <script type="text/javascript">
-      var path = window.location.pathname.replace(/les-secrets-des-mains-c4bb0536\//, '');
-      window.location.replace('https://les-caprices-d-oracel.github.io' + path);
+      var l = window.location;
+      var repo = 'les-secrets-des-mains-c4bb0536';
+      var base = 'https://les-caprices-d-oracel.github.io/' + repo;
+      var path = l.pathname;
+      if (!path.startsWith('/' + repo)) {
+        window.location.replace(base + path);
+      } else {
+        var pagePath = path.replace('/' + repo, '');
+        if (pagePath === '' || pagePath === '/' || pagePath === '/index.html') {
+          window.location.replace(base + '/lectures');
+        }
+      }
     </script>
   </head>
-  <body>
-    Redirecting...
-  </body>
+  <body>Redirecting...</body>
 </html>
