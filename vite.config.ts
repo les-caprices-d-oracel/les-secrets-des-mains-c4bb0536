@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+    base: '/les-secrets-des-mains-c4bb0536/',  
   server: {
     host: "::",
     port: 8080,
