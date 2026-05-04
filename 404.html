@@ -1,14 +1,20 @@
+cat > public/404.html << 'EOF'
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>Les Secrets des Mains</title>
     <script>
-      var path = window.location.pathname;
-      var hash = window.location.hash;
-      var query = '?p=' + encodeURIComponent(path + hash);
-      window.location.replace('/les-secrets-des-mains-c4bb0536/' + query);
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/les-secrets-des-mains-c4bb0536/' +
+        '?p=/' + l.pathname.slice(1).replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
     </script>
   </head>
   <body></body>
 </html>
+EOF
