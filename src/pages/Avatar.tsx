@@ -43,7 +43,7 @@ function AvatarPreview({ config, size = 180 }: { config: AvatarConfig; size?: nu
         seed: Math.random().toString(),
         skinColor: [config.skinColor],
         hairColor: [config.hairColor],
-        top: [config.hairStyle],
+        top: [config.hairStyle] as any,
         eyes: [config.eyes] as any,
         eyebrows: [config.eyebrows] as any,
         mouth: [config.mouth] as any,
