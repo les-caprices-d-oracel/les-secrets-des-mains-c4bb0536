@@ -6,13 +6,13 @@ import { avataaars } from '@dicebear/collection';
 const SKIN_COLORS = ['fdbcb4', 'f8ad9d', 'f6b7a1', 'eaa79c', 'ca6b3d', 'a05028'];
 const HAIR_COLORS = ['2c1810', '8B4513', 'D2691E', 'DAA520', 'F4D03F', 'C0C0C0', 'FF4500', '1a1a2e'];
 
-const HAIR_FEMALE = ['longHair01', 'longHair02', 'longHair03', 'longHair04', 'longHair05', 'longHair06', 'longHair07'];
-const HAIR_MALE = ['shortHair01', 'shortHair02', 'shortHair03', 'shortHair04', 'shortHair05'];
-const EYES_OPTIONS = ['eyes01', 'eyes02', 'eyes03', 'eyes04', 'eyes05', 'eyes06'];
-const EYEBROWS_OPTIONS = ['eyebrows01', 'eyebrows02', 'eyebrows03', 'eyebrows04', 'eyebrows05'];
-const MOUTH_OPTIONS = ['mouth01', 'mouth02', 'mouth03', 'mouth04', 'mouth05'];
-const ACCESSORIES = ['', 'glasses01', 'glasses02', 'sunglasses01', 'sunglasses02'];
-const FACIAL_HAIR = ['', 'beardLight01', 'beardMedium01', 'beardMedium02'];
+const HAIR_FEMALE = ['longHair01', 'longHair02', 'longHair03', 'longHair04', 'longHair05'];
+const HAIR_MALE = ['shortHair01', 'shortHair02', 'shortHair03', 'shortHair04'];
+const EYES_OPTIONS = ['closed' as const, 'cry' as const, 'default' as const, 'eyeRoll' as const, 'happy' as const, 'hearts' as const, 'side' as const, 'squint' as const, 'surprised' as const, 'winkWacky' as const, 'wink' as const];
+const EYEBROWS_OPTIONS = ['angry' as const, 'angryNatural' as const, 'defaultNatural' as const, 'flatNatural' as const, 'frownNatural' as const, 'raisedExcitedNatural' as const, 'sadConcernedNatural' as const];
+const MOUTH_OPTIONS = ['concerned' as const, 'disbelief' as const, 'eating' as const, 'grimace' as const, 'sad' as const, 'screamOpen' as const, 'serious' as const, 'smile' as const, 'tongue' as const, 'twinkle' as const];
+const ACCESSORIES = ['', 'kurt' as const, 'prescription01' as const, 'prescription02' as const, 'round' as const, 'sunglasses' as const, 'wayfarers' as const];
+const FACIAL_HAIR = ['', 'beardLight' as const, 'beardMedium' as const, 'moustacheFancy' as const];
 const CLOTHES = ['blazer01', 'blazer02', 'blazer03', 'sweater01', 'sweater02', 'hoodie01', 'shirt01', 'shirt02'];
 const CLOTHES_COLORS = ['3C4F5C', '65C9FF', '5199E4', '25557C', '929598', 'A7FFC4', 'FFDEB5', 'FF5C5C', '8B3A8B'];
 
@@ -44,11 +44,11 @@ function AvatarPreview({ config, size = 180 }: { config: AvatarConfig; size?: nu
         skinColor: [config.skinColor],
         hairColor: [config.hairColor],
         top: [config.hairStyle],
-        eyes: [config.eyes],
-        eyebrows: [config.eyebrows],
-        mouth: [config.mouth],
-        accessories: [config.accessories].filter(Boolean),
-        facialHair: [config.facialHair].filter(Boolean),
+        eyes: [config.eyes] as any,
+        eyebrows: [config.eyebrows] as any,
+        mouth: [config.mouth] as any,
+        accessories: config.accessories ? [config.accessories] : [] as any,
+        facialHair: config.facialHair ? [config.facialHair] : [] as any,
         clotheColor: [config.clothesColor],
         clothes: [config.clothes],
         backgroundColor: ['transparent'],
@@ -208,10 +208,10 @@ function PageChoixGenre({ onChoix }: { onChoix: (g: Gender) => void }) {
     skinColor: 'fdbcb4',
     hairColor: '2c1810',
     hairStyle: 'longHair03',
-    eyes: 'eyes02',
-    eyebrows: 'eyebrows02',
-    mouth: 'mouth01',
-    accessories: 'glasses01',
+    eyes: 'default',
+    eyebrows: 'defaultNatural',
+    mouth: 'smile',
+    accessories: 'sunglasses',
     facialHair: '',
     clothes: 'blazer01',
     clothesColor: '8B3A8B',
@@ -222,11 +222,11 @@ function PageChoixGenre({ onChoix }: { onChoix: (g: Gender) => void }) {
     skinColor: 'f8ad9d',
     hairColor: '1a1a2e',
     hairStyle: 'shortHair02',
-    eyes: 'eyes04',
-    eyebrows: 'eyebrows04',
-    mouth: 'mouth02',
+    eyes: 'happy',
+    eyebrows: 'angry',
+    mouth: 'serious',
     accessories: '',
-    facialHair: 'beardLight01',
+    facialHair: 'beardLight',
     clothes: 'blazer02',
     clothesColor: '262E33',
   };
@@ -390,11 +390,11 @@ function PagePersonnalisation({
     skinColor: 'fdbcb4',
     hairColor: '2c1810',
     hairStyle: gender === 'sorciere' ? 'longHair03' : 'shortHair02',
-    eyes: 'eyes02',
-    eyebrows: 'eyebrows02',
-    mouth: 'mouth01',
+    eyes: 'default',
+    eyebrows: 'defaultNatural',
+    mouth: 'smile',
     accessories: '',
-    facialHair: gender === 'sorcier' ? 'beardLight01' : '',
+    facialHair: gender === 'sorcier' ? 'beardLight' : '',
     clothes: 'blazer01',
     clothesColor: '3C4F5C',
   });
