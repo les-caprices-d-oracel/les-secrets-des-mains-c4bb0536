@@ -50,7 +50,6 @@ function AvatarPreview({ config, size = 180 }: { config: AvatarConfig; size?: nu
         accessories: config.accessories ? [config.accessories] : [] as any,
         facialHair: config.facialHair ? [config.facialHair] : [] as any,
         clothesColor: [config.clothesColor],
-        clothes: [config.clothes],
         backgroundColor: ['transparent'],
       }).toString();
     } catch (e) {
