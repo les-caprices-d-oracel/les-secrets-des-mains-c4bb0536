@@ -6,14 +6,14 @@ import { avataaars } from '@dicebear/collection';
 const SKIN_COLORS = ['fdbcb4', 'f8ad9d', 'f6b7a1', 'eaa79c', 'ca6b3d', 'a05028'];
 const HAIR_COLORS = ['2c1810', '8B4513', 'D2691E', 'DAA520', 'F4D03F', 'C0C0C0', 'FF4500', '1a1a2e'];
 
-const HAIR_FEMALE = ['longHair01', 'longHair02', 'longHair03', 'longHair04', 'longHair05'];
-const HAIR_MALE = ['shortHair01', 'shortHair02', 'shortHair03', 'shortHair04'];
+const HAIR_FEMALE = ['bob', 'bun', 'curly', 'curvy', 'frida', 'longButNotTooLong', 'miaWallace', 'straight01', 'straight02', 'dreads', 'froBand', 'bigHair'];
+const HAIR_MALE = ['shortCurly', 'shortFlat', 'shortRound', 'shortWaved', 'sides', 'theCaesar', 'theCaesarAndSidePart', 'shaggy', 'dreads01', 'dreads02', 'fro', 'shavedSides'];
 const EYES_OPTIONS = ['closed' as const, 'cry' as const, 'default' as const, 'eyeRoll' as const, 'happy' as const, 'hearts' as const, 'side' as const, 'squint' as const, 'surprised' as const, 'winkWacky' as const, 'wink' as const];
 const EYEBROWS_OPTIONS = ['angry' as const, 'angryNatural' as const, 'defaultNatural' as const, 'flatNatural' as const, 'frownNatural' as const, 'raisedExcitedNatural' as const, 'sadConcernedNatural' as const];
 const MOUTH_OPTIONS = ['concerned' as const, 'disbelief' as const, 'eating' as const, 'grimace' as const, 'sad' as const, 'screamOpen' as const, 'serious' as const, 'smile' as const, 'tongue' as const, 'twinkle' as const];
 const ACCESSORIES = ['', 'kurt' as const, 'prescription01' as const, 'prescription02' as const, 'round' as const, 'sunglasses' as const, 'wayfarers' as const];
 const FACIAL_HAIR = ['', 'beardLight' as const, 'beardMedium' as const, 'moustacheFancy' as const];
-const CLOTHES = ['blazer01', 'blazer02', 'blazer03', 'sweater01', 'sweater02', 'hoodie01', 'shirt01', 'shirt02'];
+const CLOTHES = ['blazerAndShirt', 'blazerAndSweater', 'collarAndSweater', 'graphicShirt', 'hoodie', 'overall', 'shirtCrewNeck', 'shirtScoopNeck', 'shirtVNeck'];
 const CLOTHES_COLORS = ['3C4F5C', '65C9FF', '5199E4', '25557C', '929598', 'A7FFC4', 'FFDEB5', 'FF5C5C', '8B3A8B'];
 
 type Gender = 'sorciere' | 'sorcier';
@@ -40,7 +40,7 @@ function AvatarPreview({ config, size = 180 }: { config: AvatarConfig; size?: nu
     try {
       return createAvatar(avataaars, {
         size,
-        seed: Math.random().toString(),
+        seed: config.gender + config.skinColor + config.hairStyle,
         skinColor: [config.skinColor],
         hairColor: [config.hairColor],
         top: [config.hairStyle] as any,
@@ -49,6 +49,7 @@ function AvatarPreview({ config, size = 180 }: { config: AvatarConfig; size?: nu
         mouth: [config.mouth] as any,
         accessories: config.accessories ? [config.accessories] : [] as any,
         facialHair: config.facialHair ? [config.facialHair] : [] as any,
+        clothing: [config.clothes] as any,
         clothesColor: [config.clothesColor],
         backgroundColor: ['transparent'],
       }).toString();
@@ -206,7 +207,7 @@ function PageChoixGenre({ onChoix }: { onChoix: (g: Gender) => void }) {
     gender: 'sorciere',
     skinColor: 'fdbcb4',
     hairColor: '2c1810',
-    hairStyle: 'longHair03',
+    hairStyle: 'straight01',
     eyes: 'default',
     eyebrows: 'defaultNatural',
     mouth: 'smile',
@@ -220,7 +221,7 @@ function PageChoixGenre({ onChoix }: { onChoix: (g: Gender) => void }) {
     gender: 'sorcier',
     skinColor: 'f8ad9d',
     hairColor: '1a1a2e',
-    hairStyle: 'shortHair02',
+    hairStyle: 'shortFlat',
     eyes: 'happy',
     eyebrows: 'angry',
     mouth: 'serious',
@@ -388,7 +389,7 @@ function PagePersonnalisation({
     gender,
     skinColor: 'fdbcb4',
     hairColor: '2c1810',
-    hairStyle: gender === 'sorciere' ? 'longHair03' : 'shortHair02',
+    hairStyle: gender === 'sorciere' ? 'straight01' : 'shortFlat',
     eyes: 'default',
     eyebrows: 'defaultNatural',
     mouth: 'smile',
