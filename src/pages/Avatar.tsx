@@ -219,15 +219,15 @@ function PageChoixGenre({ onChoix }: { onChoix: (g: Gender) => void }) {
 
   const configM: AvatarConfig = {
     gender: 'sorcier',
-    skinColor: 'f8ad9d',
-    hairColor: '1a1a2e',
-    hairStyle: 'shortFlat',
-    eyes: 'happy',
-    eyebrows: 'angry',
-    mouth: 'serious',
+    skinColor: 'eaa79c',
+    hairColor: '2c1810',
+    hairStyle: 'theCaesar',
+    eyes: 'default',
+    eyebrows: 'defaultNatural',
+    mouth: 'smile',
     accessories: '',
     facialHair: 'beardLight',
-    clothes: 'blazer02',
+    clothes: 'blazerAndShirt',
     clothesColor: '262E33',
   };
 
